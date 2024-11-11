@@ -73,3 +73,27 @@ Func Slider()
 		Return
 	EndIf
 EndFunc   ;==>Slider
+
+Func ConvertLogDateToStandard($sDate)
+	If $sDate == "" Then Return ""
+
+	$aDateTime = StringSplit($sDate, ' ')
+	If @error Then Return ""
+
+	$aDates = StringSplit($aDateTime[1], "-")
+	If @error Then Return ""
+
+	Return $aDates[1] & "/" & $aDates[2] & "/" & $aDates[3] & " " & $aDateTime[2]
+EndFunc   ;==>ConvertLogDateToStandard
+
+Func GetLocaleDiff()
+	Local $tSystem = _Date_Time_GetSystemTime()
+	Local $tLocal = _Date_Time_SystemTimeToTzSpecificLocalTime($tSystem)
+
+	Local $sSystemDateTime = _Date_Time_SystemTimeToDateTimeStr($tSystem, 1)
+	Local $sLocalDateTime = _Date_Time_SystemTimeToDateTimeStr($tLocal, 1)
+
+	Local $iDiff = _DateDiff('n', $sSystemDateTime, $sLocalDateTime)
+
+	Return $iDiff
+EndFunc   ;==>GetLocaleDiff

@@ -1,5 +1,6 @@
 #include-once
 #include <File.au3>
+#include "Common.au3"
 #Region LogEx.au3 - #FUNCTION#
 
 ; #FUNCTION# ====================================================================================================================
@@ -219,3 +220,21 @@ Func CustomConsole($iComponent, $sText, $bAppend = False)
 	EndIf
 	GUICtrlSetData($iComponent, $sText, 1)
 EndFunc   ;==>CustomConsole
+
+Func FindLastDateTimeEntryInlogs($sTextToSearch)
+	Local $sLastLine = ""
+	Local $hFile = FileOpen("IdleRunnerLogs\Logs.txt", $FO_READ)
+	If $hFile == -1 Then Return
+
+	While 1
+		Local $sLine = FileReadLine($hFile)
+		If @error = -1 Then ExitLoop
+		Local $sTrimmedLine = StringTrimLeft($sLine, 22)
+
+		If $sTrimmedLine == $sTextToSearch Then $sLastLine = $sLine
+	WEnd
+	FileClose($hFile)
+
+	Local $sDateTime = StringLeft($sLastLine, 19)
+	Return ConvertLogDateToStandard($sDateTime)
+EndFunc   ;==>FindLastDateTimeEntryInlogs

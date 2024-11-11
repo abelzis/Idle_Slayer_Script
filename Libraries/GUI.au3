@@ -27,9 +27,10 @@ Global $bAutoBuyUpgradeState = False, _
 		$bDisableRageState = False, _
 		$bAutoAscendState = False, _
 		$bPerfectChestHuntState = False, _
+		$bAutoplayCasinoState = False, _
 		$bTogglePause = False
 
-Global $sVersion = "3.4.3"
+Global $sVersion = "3.4.5"
 Global $iJumpSliderValue = 150, _
 		$iCirclePortalsCount = 7, _
 		$iAutoAscendTimer = 10, _
@@ -39,8 +40,8 @@ Global $iJumpSliderValue = 150, _
 		$iTimerAutoAscend = TimerInit(), _
 		$iTimerFocusGame = TimerInit(), _
 		$iLastCheckTimeLoop = TimerInit()
-Global $aSettingGlobalVariables[16] = ["iAutoBuyTimer", "iAutoAscendTimer", "bAutoAscendState", "bAutoBuyUpgradeState", "bCraftSoulBonusState", "bSkipBonusStageState", "bCraftRagePillState", "bCirclePortalsState", "iJumpSliderValue", "bNoLockpickingState", "iCirclePortalsCount", "bDimensionalState", "bBiDimensionalState", "bDisableRageState", "bNoReinforcedCrystalSaverState", "bPerfectChestHuntState"]
-Global $aSettingCheckBoxes[12] = ["bAutoAscendState", "bAutoBuyUpgradeState", "bCraftSoulBonusState", "bSkipBonusStageState", "bCraftRagePillState", "bCirclePortalsState", "bNoLockpickingState", "bBiDimensionalState", "bDimensionalState", "bDisableRageState", "bNoReinforcedCrystalSaverState", "bPerfectChestHuntState"]
+Global $aSettingGlobalVariables[17] = ["iAutoBuyTimer", "iAutoAscendTimer", "bAutoAscendState", "bAutoBuyUpgradeState", "bCraftSoulBonusState", "bSkipBonusStageState", "bCraftRagePillState", "bCirclePortalsState", "iJumpSliderValue", "bNoLockpickingState", "iCirclePortalsCount", "bDimensionalState", "bBiDimensionalState", "bDisableRageState", "bNoReinforcedCrystalSaverState", "bPerfectChestHuntState", "bAutoplayCasinoState"]
+Global $aSettingCheckBoxes[13] = ["bAutoAscendState", "bAutoBuyUpgradeState", "bCraftSoulBonusState", "bSkipBonusStageState", "bCraftRagePillState", "bCirclePortalsState", "bNoLockpickingState", "bBiDimensionalState", "bDimensionalState", "bDisableRageState", "bNoReinforcedCrystalSaverState", "bPerfectChestHuntState", "bAutoplayCasinoState"]
 
 ; #FUNCTION# ====================================================================================================================
 ; Return values .: Succes - A windows handle
@@ -217,6 +218,12 @@ Func CreateMinigamesSheet($hGUIForm, $iTabControl)
 	Local $iPerfectChestHunt = GUICtrlCreatePicCustom('Resources\PerfectChestHunt.jpg', 506, 44, 183, 18, $SS_BITMAP + $SS_NOTIFY)
 	_Resource_SetToCtrlID($iPerfectChestHunt, 'PERFECTCHESTHUNT')
 	GUICtrlSetTip(-1, "Uses a riskier strategy that prioritizes Perfect Chest Hunts over resources. Strategy summary: ignores Life Saver until 2x is found.")
+
+	Global $iCheckBoxbAutoplayCasinoState = GUICtrlCreatePicCustom('Resources\CheckboxUnchecked.jpg', 480, 83, 16, 16, $SS_BITMAP + $SS_NOTIFY)
+	GUICtrlSetOnEvent(-1, "EventGlobalCheckBox")
+	Local $iAutoplayCasino = GUICtrlCreatePicCustom('Resources\AutoplayCasino.jpg', 506, 83, 154, 16, $SS_BITMAP + $SS_NOTIFY)
+	_Resource_SetToCtrlID($iAutoplayCasino, 'AUTOPLAYCASINO')
+	GUICtrlSetTip(-1, "Automatically plays Free Daily Casino Roll")
 
 	Return $iTabMinigames
 EndFunc   ;==>CreateMinigamesSheet

@@ -36,6 +36,7 @@
 #AutoIt3Wrapper_Res_File_Add=Resources\CraftBidimensionalStaff.jpg, RT_RCDATA, BIDIMENSIONAL,0
 #AutoIt3Wrapper_Res_File_Add=Resources\CraftDimensionalStaff.jpg, RT_RCDATA, DIMENSIONAL,0
 #AutoIt3Wrapper_Res_File_Add=Resources\PerfectChestHunt.jpg, RT_RCDATA, PERFECTCHESTHUNT,0
+#AutoIt3Wrapper_Res_File_Add=Resources\AutoplayCasino.jpg, RT_RCDATA, AUTOPLAYCASINO,0
 #AutoIt3Wrapper_Res_File_Add=Resources\DisableRage.jpg, RT_RCDATA, DISABLERAGE,0
 #AutoIt3Wrapper_Res_File_Add=Resources\0.jpg, RT_RCDATA, NUM0,0
 #AutoIt3Wrapper_Res_File_Add=Resources\10.jpg, RT_RCDATA, NUM10,0
@@ -84,6 +85,7 @@
 #include "Libraries\Common.au3"
 #include "Libraries\AscendingHeights.au3"
 #include "Libraries\Chesthunt.au3"
+#include "Libraries\Casino.au3"
 #include <ButtonConstants.au3>
 #include <GUIConstantsEx.au3>
 #include <StaticConstants.au3>
@@ -114,6 +116,8 @@ Func Main()
 	; A lot of Global Function are declared in Libraries/GUI
 	_AuThread_StartThread("ShootAndBoost", @AutoItPID)
 	SyncProcess()
+
+	Local $iTimerCasino = 0
 
 	; Infinite Loops
 	While 1
@@ -164,6 +168,14 @@ Func Main()
 			SyncProcess(True)
 		EndIf
 
+		; Play Casino
+		If $bAutoplayCasinoState Then
+			PixelSearch(154, 70, 154, 70, 0xFFAF36)
+			If Not @error And (600000 < TimerDiff($iTimerCasino)) Then
+				$iTimerCasino = TimerInit()
+				If IsCasinoReady() Then PlayCasino()
+			EndIf
+		EndIf
 
 		; Chest-hunt
 		PixelSearch(187, 296, 187, 296, 0xFFBB31)
@@ -342,7 +354,7 @@ Func BuyTempItem($sHexColor)
 	MouseClick("left", $aFoundPixel[0], $aFoundPixel[1], 1, 0)
 	Sleep(200)
 	MouseClick("left", 407, 213, 1, 0)
-	; Close 
+	; Close
 	MouseClick("left", 440, 690, 1, 0)
 	Sleep(100)
 EndFunc   ;==>BuyTempItem
@@ -658,6 +670,17 @@ Func ClaimQuests()
 
 EndFunc   ;==>ClaimQuests
 
+Func PlayCasino()
+    WriteInLogs("Starting Casino")
+	SyncProcess(False)
+
+	BuyTempItem(0x597289)
+	Sleep(15000)
+
+	PlayCasinoGame()
+    WriteInLogs("Casino Ended")
+	SyncProcess(True)
+EndFunc   ;==>PlayCasino
 
 
 Func ShootAndBoost()
