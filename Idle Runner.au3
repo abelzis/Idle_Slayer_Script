@@ -107,6 +107,7 @@ Func Main()
 	HotKeySet("{Home}", "Pause")
 	HotKeySet("+{Esc}", "IdleClose")
 	HotKeySet("^+b", "BuyEquipment")
+
 	; Create Saving Directory
 	DirCreate("IdleRunnerLogs")
 	; Create GUI
@@ -350,10 +351,12 @@ Func BuyTempItem($sHexColor)
 	MouseClick("left", 260, 690, 1, 0)
 	Sleep(150)
 
-	$aFoundPixel = PixelSearch(43, 330, 625, 630, $sHexColor)
-	MouseClick("left", $aFoundPixel[0], $aFoundPixel[1], 1, 0)
-	Sleep(200)
-	MouseClick("left", 407, 213, 1, 0)
+	$aFoundPixel = FindPixelUntilFound(43, 330, 625, 630, $sHexColor)
+	If Not @error Then
+		MouseClick("left", $aFoundPixel[0], $aFoundPixel[1], 1, 0)
+		Sleep(200)
+		MouseClick("left", 407, 213, 1, 0)
+	EndIf
 	; Close
 	MouseClick("left", 440, 690, 1, 0)
 	Sleep(100)
